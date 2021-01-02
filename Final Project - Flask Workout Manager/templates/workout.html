@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title"> <font size="+7"> {{ workout['name'].title() }} </font> </h3>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="field">
+        <div class="control">
+            Workout Info:
+        </div>
+
+        <div class="control">
+            <p style="margin-left:10%"> Difficulty:{% if workout['diff'] == 1 %} Easy{% elif workout['diff'] == 2 %} Medium {% else %} Hard{% endif %} </p>
+        </div>
+
+        <div class="control">
+            <p style="margin-left:10%"> Time: {{ workout['length'] }} (in Hours) </p>
+        </div>
+    </div>
+
+    {% if workout['exercises'] %}
+        {% for exercise in workout['exercises'] %}
+            <div class="field">
+                <div class="control">
+                    <a href="/exe/{{ exercise['name'] }}"> <font size="+1"> {{ loop.index }}) {{ exercise['name'].title() }} </font> </a>
+                </div>
+
+                {% if exercise['weight'] is not none %}
+                    <div class="control">
+                        <p style="margin-left:10%"> Weight Ratio: {{ exercise['weight'] }} </p>
+                    </div>
+                {% endif %}
+
+                {% if exercise['reps'] is not none %}
+                    <div class="control">
+                        <p style="margin-left:10%"> Repetitions: {{ exercise['reps'] }} </p>
+                    </div>
+                {% endif %}
+
+                {% if exercise['sets'] is not none %}
+                    <div class="control">
+                        <p style="margin-left:10%"> Sets: {{ exercise['sets'] }} </p>
+                    </div>
+                {% endif %}
+
+                {% if exercise['time'] is not none %}
+                    <div class="control">
+                        <p style="margin-left:10%"> Time: {{ exercise['time'] }} Minute(s)</p>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="field">
+        <div class="control">
+            Enter your weight after completing the respective workout!
+        </div>
+
+        <div class="control">
+            Note: You can only track your progress ONCE per day, fill out workout and enter weight with caution.
+        </div>
+    </div>
+
+    <form method="POST" action="/track/{{ workout['name'] }}">
+        <div class="field">
+            <div class="control">
+                <input class="input" type="weight" name="weight" placeholder="Today's Weight after {{ workout['name'].title() }}" autofocus="">
+            </div>
+
+            <div class="control">
+                <button class="button"> Track </button>
+            </div>
+        </div>
+    </form>
+
+    <div class="field">
+        <div class="control">
+            *Weight Ratio is relative to your body weight
+        </div>
+
+        <div class="control">
+            e.g. Your Weight = 150lb & Weight Ratio = 0.5
+        </div>
+
+        <div class="control">
+            Intended Weight Use: 75lb
+        </div>
+    </div>
+</div>
+{% endblock %}

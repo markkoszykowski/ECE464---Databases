@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title"> <font size="+7"> Results for {{ search }} </font> </h3>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% if results %}
+        <div class="field">
+            {% for workout in results %}
+                <div class="control">
+                    <a href="/wor/{{ workout['name'] }}"> <font size="+5"> {{ workout['name'].title() }} </font> </a>
+                </div>
+
+                <div class="control">
+                    <p style="margin-left:10%"> Difficulty:{% if workout['diff'] == 1 %} Easy{% elif workout['diff'] == 2 %} Medium {% else %} Hard{% endif %} </p>
+                </div>
+
+                <div class="control">
+                    <p style="margin-left:10%"> Time: {{ workout['length'] }} Hour(s) </p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="field">
+            <div class="control">
+                Sorry, nothing matches {{ search }}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

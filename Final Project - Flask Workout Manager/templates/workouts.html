@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title"> <font size="+7"> Workouts </font> </h3>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/search">
+        <div class="field">
+            <div class="control">
+                Looking for a specific exercise or keyword?
+            </div>
+
+            <div class="control">
+                <input class="input is-large" type="search" name="search" placeholder="Search" autofocus="">
+                <button class="button"> Search </button>
+            </div>
+        </div>
+    </form>
+
+    <div class="field">
+        <div class="control">
+            Sort by:
+        </div>
+
+        <div class="control">
+                <p style="margin-left:10%"> <a href="{{ url_for('work.workouts', sort='name', scend=1) }}"> Name Ascending</a> </p>
+        </div>
+
+        <div class="control">
+                <p style="margin-left:10%"> <a href="{{ url_for('work.workouts', sort='name', scend=-1) }}"> Name Descending </a> </p>
+        </div>
+
+        <div class="control">
+                <p style="margin-left:10%"> <a href="{{ url_for('work.workouts', sort='uses', scend=-1) }}"> Popularity </a> </p>
+        </div>
+
+        <div class="control">
+                <p style="margin-left:10%"> <a href="{{ url_for('work.workouts', sort='length', scend=1) }}"> Length Ascending </a> </p>
+        </div>
+
+        <div class="control">
+                <p style="margin-left:10%"> <a href="{{ url_for('work.workouts', sort='length', scend=-1) }}"> Length Descending </a> </p>
+        </div>
+
+        <div class="control">
+                <p style="margin-left:10%"> <a href="{{ url_for('work.workouts', sort='diff', scend=1) }}"> Difficulty Ascending </a> </p>
+        </div>
+
+        <div class="control">
+                <p style="margin-left:10%"> <a href="{{ url_for('work.workouts', sort='diff', scend=-1) }}"> Difficulty Descending </a> </p>
+        </div>
+    </div>
+
+    <div class="field">
+        {% for workout in workouts %}
+            <div class="control">
+                <a href="/wor/{{ workout['name'] }}"> <font size="+5"> {{ workout['name'].title() }} </font> </a>
+            </div>
+
+            <div class="control">
+                <p style="margin-left:10%"> Difficulty:{% if workout['diff'] == 1 %} Easy{% elif workout['diff'] == 2 %} Medium {% else %} Hard{% endif %} </p>
+            </div>
+
+            <div class="control">
+                <p style="margin-left:10%"> Time: {{ workout['length'] }} Hour(s) </p>
+            </div>
+
+            {% if admin %}
+                <div class="control">
+                    <p style="margin-left:10%"> Uses: {{ workout['uses'] }} </p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

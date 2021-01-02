@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title"> <font size="+5"> Create Workout Page </font> </h3>
+    	{% with messages = get_flashed_messages() %}
+	        {% if messages %}
+    		    <div class="notification is-danger">
+        		    {{ messages[0] }}
+    		    </div>
+	        {% endif %}
+	    {% endwith %}
+
+        {% for workout in workouts %}
+            <div class="field">
+                <div class="control">
+                    {{ workout['name'].title() }}
+                </div>
+                <form action="/append/{{ workout['name'] }}">
+                    <div class="control">
+                        <button class="button"> Update </button>
+                    </div>
+                </form>
+                <form action="/remove/{{ workout['name'] }}">
+                    <div class="control">
+                        <button class="button"> Delete </button>
+                    </div>
+                </form>
+            </div>
+        {% endfor %}
+
+        <form method="POST" action="/create">
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="workout" name="workout" placeholder="New Workout" autofocus="">
+                </div>
+
+                <div class="control">
+                    <input class="input is-large" type="difficulty" name="difficulty" placeholder="Difficulty Level (1 - Easy, 2 - Medium, 3 - Hard)" autofocus="">
+                </div>
+
+                <div class="control">
+                    <input class="input is-large" type="length" name="length" placeholder="Workout Length (in Hours)" autofocus="">
+                </div>
+
+                <div class="control">
+                    <button class="button"> Create </button>
+                </div>
+            </div>
+        </form>
+</div>
+{% endblock %}

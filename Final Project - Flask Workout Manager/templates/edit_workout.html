@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title"> <font size="+5"> {{ workout_name.title() }} Editor </font> </h3>
+    {% with messages = get_flashed_messages() %}
+	    {% if messages %}
+    		<div class="notification is-danger">
+        		{{ messages[0] }}
+    		</div>
+	    {% endif %}
+    {% endwith %}
+
+    {% if workout_exercises['exercises'] %}
+        {% for exercise in workout_exercises['exercises'] %}
+            <div class="field">
+                <form action="/pop/{{ workout_name }}/{{ loop.index }}">
+                    <div class="control">
+                        {{ loop.index }}) {{ exercise['name'].title() }}
+                    </div>
+
+                    {% if exercise['weight'] %}
+                        <div class="control">
+                            <p style="margin-left:10%"> Weight Ratio: {{ exercise['weight'] }} </p>
+                        </div>
+                    {% endif %}
+
+                    {% if exercise['reps'] %}
+                        <div class="control">
+                            <p style="margin-left:10%"> Repitions: {{ exercise['reps'] }} </p>
+                        </div>
+                    {% endif %}
+
+                    {% if exercise['sets'] %}
+                        <div class="control">
+                            <p style="margin-left:10%"> Sets: {{ exercise['sets'] }} </p>
+                        </div>
+                    {% endif %}
+
+                    {% if exercise['time'] %}
+                        <div class="control">
+                            <p style="margin-left:10%"> Time: {{ exercise['time'] }} Minute(s) </p>
+                        </div>
+                    {% endif %}
+
+                    <button class="button">Delete</button>
+                </form>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    {% for exercise in exercises %}
+        <form method="POST" action="/append/{{ workout_name }}/{{ exercise['name'] }}">
+            <div class="field">
+                <div class="control">
+                    {{ exercise['name'].title() }}
+                </div>
+
+                <div class="control">
+                    <input class="input" type="order" name="order" placeholder="Order" autofocus="">
+                </div>
+
+                <div class="control">
+                    <input class="input" type="weight" name="weight" placeholder="Weight Ratio" autofocus="">
+                </div>
+
+                <div class="control">
+                    <input class="input" type="reps" name="reps" placeholder="Repetitions" autofocus="">
+                </div>
+
+                <div class="control">
+                    <input class="input" type="sets" name="sets" placeholder="Sets" autofocus="">
+                </div>
+
+                <div class="control">
+                    <input class="input" type="tim" name="time" placeholder="Time (in Minutes)" autofocus="">
+                </div>
+
+                <div class="control">
+                    <button class="button"> Add </button>
+                </div>
+            </div>
+        </form>
+    {% endfor %}
+</div>
+{% endblock %}

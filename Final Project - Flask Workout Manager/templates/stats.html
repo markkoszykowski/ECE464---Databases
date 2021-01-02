@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+
+<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<title>Weight Progress</title>
+		<script src="../static/Chart.min.js"></script>
+</head>
+
+
+
+<body>
+	<section class="hero is-primary is-fullheight">
+        <div class="hero-head">
+            <nav class="navbar">
+                <div class="container">
+                    <div id="navbarMenuHeroA" class="navbar-menu">
+						<div class="navbar-end">
+    						<a href="{{ url_for('main.index') }}" class="navbar-item">
+        						Home
+    						</a>
+
+							{% if admin %}
+    							<a href="{{ url_for('work.add') }}" class="navbar-item">
+        							Add/Delete Exercises
+    							</a>
+    						{% endif %}
+
+							{% if admin %}
+    							<a href="{{ url_for('work.create') }}" class="navbar-item">
+        							Edit Workouts
+    							</a>
+    						{% endif %}
+
+							{% if current_user.is_authenticated %}
+    							<a href="{{ url_for('work.workouts', sort='name', scend=1) }}" class="navbar-item">
+        							Workouts
+    							</a>
+    						{% endif %}
+
+    						{% if current_user.is_authenticated %}
+    							<a href="{{ url_for('main.profile') }}" class="navbar-item">
+        							Profile
+    							</a>
+							{% endif %}
+						
+							{% if current_user.is_authenticated %}
+    							<a href="{{ url_for('work.progress') }}" class="navbar-item">
+        							Progress
+    							</a>
+							{% endif %}
+
+    						{% if not current_user.is_authenticated %}
+    							<a href="{{ url_for('auth.login') }}" class="navbar-item">
+        							Login
+    							</a>
+    							<a href="{{ url_for('auth.signup') }}" class="navbar-item">
+        							Sign Up
+    							</a>
+    						{% endif %}
+
+    						{% if current_user.is_authenticated %}
+    							<a href="{{ url_for('auth.logout') }}" class="navbar-item">
+        							Logout
+    							</a>
+							{% endif %}
+						</div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </section>
+	<canvas id="myChart" width="800" height="600"></canvas>
+		<script>
+		Chart.defaults.global.responsive = false;
+		
+		var ctx = document.getElementById('myChart').getContext('2d');
+		var myChart = new Chart(ctx, {
+		    type: 'bar',
+		    data: {
+			labels: [{% for wo in workouts %} "{{wo['name'].title()}}", {% endfor %}],
+			datasets: [{
+			    label: 'Weight',
+			    backgroundColor: 'rgba(255, 0, 0, 0.5)',
+			    borderColor: 'rgba(0, 0, 0, 1)',
+			    data: [{% for wo in workouts %} {{wo['uses']}}, {% endfor %}],
+			    borderWidth: 1
+			}]
+		    },
+		    options: {
+		    	title: {
+		    		display: true,
+		    		text: 'Number of Completions per Workout'
+		    	},
+		    	scales: {
+		    		xAxes: [{
+		    			display: true,
+		    			scaleLabel: {
+		    				display: true,
+		    				labelString: 'Name of Workout'
+		    			}
+		    		}],
+		    		yAxes: [{
+		    			display: true,
+		    			ticks: {
+		    				beginAtZero: true
+		    			},
+		    			scaleLabel: {
+		    				display: true,
+		    				labelString: 'Number of Completions'
+		    			}
+		    		}]
+		    	}
+		    }
+		});
+		</script>
+</body>
+
+</html>
+
+	
